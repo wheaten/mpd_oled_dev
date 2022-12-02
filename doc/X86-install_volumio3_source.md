@@ -1,48 +1,65 @@
-Install instructions for Volumio 3 using source on x86
+# Install instructions for Volumio 3 using source on x86
 These instructions are for installing mpd_oled using source on Volumio 3 on the x86 arcitecture.
 
-These instructions are written with support of a DollaTek CH341A USB naar UART/IIC/SPI/TTL/ISP Adapter EPP/MEM parallelle converter. 
+## These instructions are written with support of a DollaTek CH341A USB naar UART/IIC/SPI/TTL/ISP Adapter EPP/MEM parallelle converter. 
 https://www.amazon.nl/gp/product/B07DJZDRKG
 This is the only type I've tested.
 
+## Base system
 
-Base system
-Install Volumio. Ensure a command line prompt is available for entering the commands below (e.g. use SSH.)
+Install [Volumio](https://volumio.org/). Ensure a command line prompt is
+available for entering the commands below (e.g.
+[use SSH](https://volumio.github.io/docs/User_Manual/SSH.html).)
 
-Install all dependencies
+## Install all dependencies
+
 Install all the packages needed to build and run cava and mpd_oled
-
+```
 sudo apt-get update
 sudo apt-get install build-essential autoconf make libtool libfftw3-dev libiniparser-dev libmpdclient-dev libi2c-dev lm-sensors libasound2-dev autoconf-archive i2c-tools dkms
+```
 
-Get headers to perform make (will break ATO):
+## Get headers to perform make (will break ATO):
+```
 wget https://github.com/volumio/x86-kernel-headers/blob/master/linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
 sudo dpkg -i linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
 sudo ln -s /usr/src/linux-headers-5.10.139-volumio /lib/modules/5.10.139-volumio/build
+```
 
-Install driver:
+## Install driver:
+
+```
 git clone https://github.com/gschorcht/i2c-ch341-usb.git
 cd i2c-ch341-usb
 make
 sudo make install
 cd ..
+```
 
 Check if loaded:
+```
 dmesg | grep i2c-ch341-usb
+```
 
 Add volumio to group:
+```
 sudo addgroup volumio i2c
 newgrp - i2c
+```
 
-Build and install cava
+## Build and install cava
+
 mpd_oled uses Cava, a bar spectrum audio visualizer, to calculate the spectrum
+   
+   <https://github.com/karlstav/cava>
 
-https://github.com/karlstav/cava
+If you have Cava installed (try running `cava -h`), there is no need
+to install Cava again, but to use the installled version you must use
+`mpd_oled -k ...`.
 
-If you have Cava installed (try running cava -h), there is no need to install Cava again, but to use the installled version you must use mpd_oled -k ....
-
-Download, build and install Cava. These commands build a reduced feature-set executable called mpd_oled_cava.
-
+Download, build and install Cava. These commands build a reduced
+feature-set executable called `mpd_oled_cava`.
+```
 git clone https://github.com/karlstav/cava
 cd cava
 ./autogen.sh
@@ -50,9 +67,13 @@ cd cava
 make
 sudo make install-strip
 cd ..    # leave cava directory
-Build and install mpd_oled
-Download and build libu8g2arm (running make might take two hours on a Pi Zero)
+```
 
+## Build and install mpd_oled
+
+Download and build libu8g2arm (running `make` might take two hours on a
+Pi Zero)
+```
 git clone https://github.com/antiprism/libu8g2arm.git
 cd libu8g2arm
 ./bootstrap
@@ -61,14 +82,18 @@ cd build
 CPPFLAGS="-W -Wall -Wno-psabi" ../configure --prefix=/usr/local
 make
 cd ../..  # leave libu8g2arm/build directory
-Download, build and install mpd_oled.
+```
 
+Download, build and install mpd_oled.
+```
 git clone https://github.com/antiprism/mpd_oled_dev
 cd mpd_oled_dev
 ./bootstrap
 LIBU8G2_DIR=../libu8g2arm CPPFLAGS="-W -Wall -Wno-psabi" ./configure --prefix=/usr/local
 make
 sudo make install-strip
+cd ..
+```
 
 I2C
 I use a cheap 4 pin I2C SSD1306 display https://www.amazon.nl/gp/product/B07DJZDRKG with a HP EliteDesk G1 800 mini or Dell Wyse 3040. 
