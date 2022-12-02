@@ -71,8 +71,7 @@ cd ..    # leave cava directory
 
 ## Build and install mpd_oled
 
-Download and build libu8g2arm (running `make` might take two hours on a
-Pi Zero)
+Download and build libu8g2arm (running `make` might take 0.5-1 hours on a low resource system)
 ```
 git clone https://github.com/antiprism/libu8g2arm.git
 cd libu8g2arm
@@ -95,28 +94,46 @@ sudo make install-strip
 cd ..
 ```
 
-I2C
-I use a cheap 4 pin I2C SSD1306 display https://www.amazon.nl/gp/product/B07DJZDRKG with a HP EliteDesk G1 800 mini or Dell Wyse 3040. 
-other PC's will also work
-It is wired like this. https://github.com/wheaten/mpd_oled_dev/blob/main/doc/connection_i2c.png
+## I2C
+
+I used a cheap 4 pin I2C [SSD1306](https://www.amazon.nl/gp/product/B074NJMPYJ) display on a HP EliteDesk G1 800 mini or Dell Wyse 3040. 
+other PC's will also work, but haven't tested it.
+It is wired like this. https://github.com/wheaten/mpd_oled_dev/blob/main/doc/connection_i2c.png.
+Depending on your OLED, you might need to change the 2 jumpers to switch between 5V and 3,3V on the VCC output.
 
 
-Configure a copy of the playing audio
-The next instruction configure MPD to make a copy of its output to a named pipe, where Cava can read it and calculate the spectrum. This works reliably, but has two disadvantages: the configuration involves changing a Volumio system file, which must be undone if Volumio is to be updated (see below); the spectrum only works when the audio is played through MPD, like music files, web radio and DLNA streaming. Creating a copy of the audio for all audio sources is harder, and may be unreliable -- see the thread on using mpd_oled with Spotify and Airplay
+## Configure a copy of the playing audio
+*The next instruction configure MPD to make a copy of its output to a*
+*named pipe, where Cava can read it and calculate the spectrum.*
+*This works reliably, but has two disadvantages: the configuration*
+*involves changing a Volumio system file, which must be undone*
+*if Volumio is to be updated (see below); the spectrum*
+*only works when the audio is played through MPD, like music files,*
+*web radio and DLNA streaming. Creating a copy of the audio for all*
+*audio sources is harder, and may be unreliable -- see the thread on*
+*[using mpd_oled with Spotify and Airplay](https://github.com/antiprism/mpd_oled/issues/4)*
 
 Configure MPD to copy its audio output to a named pipe
-(Ignore the errors)
-
+(Ignore the errors, as the pitastic was actually for the rPi, but it will fix the audio pipe)
+```
 wget -N http://pitastic.com/mpd_oled/packages/mpd_oled_volumio_install_latest.sh
 sudo bash mpd_oled_volumio_install_latest.sh
 sudo mpd_oled_volumio_mpd_conf_install
+```
 
-Note: after running this command the next Volumio update will fail with a system integrity check error. The change can be undone by running sudo mpd_oled_volumio_mpd_conf_uninstall, then after the Volumio update run sudo mpd_oled_volumio_mpd_conf_install to re-enable the audio copy.
+**Note:** after running this command the next Volumio update will fail
+with a *system integrity check* error. The change can be undone by running
+`sudo mpd_oled_volumio_mpd_conf_uninstall`, then after the Volumio update
+run `sudo mpd_oled_volumio_mpd_conf_install` to re-enable the audio copy.
 
-Set the time zone
-If the mpd_oled clock does not display the local time then you may need to set the system time zone. Set this in the UI, or run the following command for a console based application where you can specify your location
+## Set the time zone
 
+If the mpd_oled clock does not display the local time then you may need
+to set the system time zone. Set this in the UI, or run the following
+command for a console based application where you can specify your location
+```
 sudo dpkg-reconfigure tzdata
+```
 
 Configure mpd_oled and set to run at boot
 Note: The program can be run without the audio copy enabled, in which case the spectrum analyser area will be blank
