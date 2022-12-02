@@ -110,6 +110,7 @@ public:
   int clock_format = 0;    // 0-3: 0,1 - 24h  2,3 - 12h  0,2 - leading 0
   int date_format = 0;     // 0: DD-MM-YYYY, 1: MM-DD-YYYY
   char pause_screen = 'p'; // p - play, s - stop
+  char layout = 't';       // t - track info, n - Cava only
   string cava_prog_name = "mpd_oled_cava"; // cava executable name
   string cava_method = "fifo";             // fifo, alsa or pulse
   string cava_source;                      // Path to FIFO / alsa device
@@ -165,6 +166,7 @@ Options
              number - switch between n and i with this period (hours), which
              may help avoid screen burn
   -p <plyr>  Player: mpd, moode, volumio, runeaudio (default: detected)
+  -L <val>   Layout type cava: t - trackinfo (default),  n - No trackinfo, CAVA only 
 )",
           get_program_name().c_str(), help_ver_text,
           DEF_SCROLL_RATE, DEF_SCROLL_DELAY, cava_method.c_str(),
@@ -307,6 +309,15 @@ void OledOpts::process_command_line(int argc, char **argv)
       break;
     }
 
+   case 'L': {
+      if (strcmp(optarg, "t") == 0)
+        layout = 't';
+      else if (strcmp(optarg, "n") == 0)
+        layout = 'n';
+      else
+        error("Layout type is not t or n", c);
+      break;
+    }
     default:
       error("unknown command line error");
     }
@@ -477,31 +488,44 @@ void draw_clock(U8G2 &u8g2, const display_info &disp_info)
 
 void draw_spect_display(U8G2 &u8g2, const display_info &disp_info)
 {
-  draw_spectrum(u8g2, 0, 0, SPECT_WIDTH, 32, disp_info.spect);
-  draw_connection(u8g2, 116, 0, disp_info.conn);
-  draw_triangle_slider(u8g2, 100, 0, 12, 8, disp_info.status.get_volume());
+	if (disp_info.layout == 'n') {
+		draw_text(u8g2, 5, 55, "31", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 15, 55, "63", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 25, 55, "125", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 39, 55, "250", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 53, 55, "500", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 65, 55, "1k", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 77, 55, "2k", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 89, 55, "4k", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 101, 55, "8k", u8g2_font_tom_thumb_4x6_t_all);
+		draw_text(u8g2, 113, 55, "16k", u8g2_font_tom_thumb_4x6_t_all);
+	draw_spectrum(u8g2, 5, 0, 128, 53, disp_info.spect);}
+	else {
+		draw_spectrum(u8g2, 0, 0, SPECT_WIDTH, 32, disp_info.spect);
+		draw_connection(u8g2, 116, 0, disp_info.conn);
+		draw_triangle_slider(u8g2, 100, 0, 12, 8, disp_info.status.get_volume());
 
-    //draw_text(u8g2, 68, 0, disp_info.status.get_kbitrate_str().c_str());
-  if (disp_info.status.get_kbitrate() > 0)
-    draw_text(u8g2, 68, 0, disp_info.status.get_kbitrate_str(), u8g_font_courB08);
+		//draw_text(u8g2, 68, 0, disp_info.status.get_kbitrate_str().c_str());
+		if (disp_info.status.get_kbitrate() > 0)
+			draw_text(u8g2, 68, 0, disp_info.status.get_kbitrate_str(), u8g_font_courB08);
 
-  u8g2.setMaxClipWindow();
-  int clock_offset = (disp_info.clock_format < 2) ? 0 : -2;
-  draw_time(u8g2, 72 + clock_offset, 16, disp_info.clock_format,
+		u8g2.setMaxClipWindow();
+		int clock_offset = (disp_info.clock_format < 2) ? 0 : -2;
+		draw_time(u8g2, 72 + clock_offset, 16, disp_info.clock_format,
             u8g2_font_courB14_tf);
 
-  vector<double> scroll_origin(disp_info.scroll.begin() + 2,
+		vector<double> scroll_origin(disp_info.scroll.begin() + 2,
                                disp_info.scroll.begin() + 4);
-  draw_text_scroll(u8g2, 0, 38, disp_info.status.get_origin(), scroll_origin,
+		draw_text_scroll(u8g2, 0, 38, disp_info.status.get_origin(), scroll_origin,
                    disp_info.text_change.secs(), u8g_font_courB08, 128, 10);
 
-  vector<double> scroll_title(disp_info.scroll.begin(),
+		vector<double> scroll_title(disp_info.scroll.begin(),
                               disp_info.scroll.begin() + 2);
-  draw_text_scroll(u8g2, 0, 46, disp_info.status.get_title(), scroll_title,
+		draw_text_scroll(u8g2, 0, 46, disp_info.status.get_title(), scroll_title,
                    disp_info.text_change.secs(), u8g_font_courB08, 128, 10);
 
-  draw_solid_slider(u8g2, 0, 56 + 6, 128, 2,
-                    100 * disp_info.status.get_progress());
+		draw_solid_slider(u8g2, 0, 56 + 6, 128, 2,100 * disp_info.status.get_progress());
+		}
 }
 
 void draw_display(U8G2 &u8g2, const display_info &disp_info)
