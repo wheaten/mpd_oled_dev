@@ -135,24 +135,62 @@ command for a console based application where you can specify your location
 sudo dpkg-reconfigure tzdata
 ```
 
-Configure mpd_oled and set to run at boot
+## Create a start script for MPD_OLED
+If you want to run MPD_OLED in it's orignal configuration use:
+```
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L t -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+```
+
+If you want too run as a full CAVA display, use:
+```
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+```
+```
+mkdir /home/volumio/scripts
+nano /home/volumio/scripts/start_mpd.sh
+```
+```
+#/bin/bash
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+```
+Copy the desired string as mention above, in this case I take the full cava 
+
+press CTRL+0 => Enter => CTRL+x
+```
+chmod 0755 /home/volumio/scripts/start_mpd.sh
+```
+
+## Configure mpd_oled and set to run at boot
 Note: The program can be run without the audio copy enabled, in which case the spectrum analyser area will be blank
 
-Install a service file. This will overwrite an existing mpd_oled service file
+Create and Install a service file. 
+```
+sudo nano /lib/systemd/system/oled.service
 
-sudo mpd_oled_service_install
-The mpd_oled program can now be run with sudo mpd_oled_service_edit (plus options), and this also sets up mpd_oled with the same options as a service to be run at boot. Rerunning sudo mpd_oled_service_edit with different options will stop the current running mpd_oled and start it again with the new options. (Test commands can also be run with mpd_oled (plus options), and stopped with Ctrl-C, but ensure that no other copy of mpd_oled is running).
+[Unit]
+Description=MPD OLED Plugin
+User=volumio
+Group=audio
+After=network.target sound.target mpd.service
+Requires=mpd.service
 
-The OLED configuration MUST be specified with -o, and is a list of values and settings separated by commas. The first three parts are required, and specify (in order) the OLED controller, model and communicatons protocol. See OLED configuration with option -o (or run mpd_oled -o help) for full details. Examples
+[Service]
+ExecStart=/bin/bash /home/volumio/scripts/start_mpd.sh
 
+[Install]
+WantedBy=multi-user.target
+```
+press CTRL+0 => Enter => CTRL+x
+```
+sudo chmod 644 /lib/systemd/system/oled.service
+sudo systemctl daemon-reload
+sudo systemctl enable oled.service
+sudo reboot
+```
+## Only tested with
 Adafruit
 SSD1306,128X64,I2C
 
-An example command, for a generic I2C SH1106 display with a display of 10 bars and a gap of 1 pixel between bars and a framerate of 20Hz is
 
-sudo mpd_oled_service_edit -o SH1106,128X64,I2C -b 10 -g 1 -f 20 -c alsa,plughw:Loopback,1
-Add extra controller settings to the option -o argument after the contoller, model, and protocol parts, in the form ,setting_name=value.
-
-For I2C OLEDs you may need to specify the I2C address, find this by running, e.g. sudo i2cdetect -y 1 and then specify the address with the i2c_address setting, e.g. sudo mpd_oled_service_edit -o SH1106,128X64,I2C,i2c_address=3d .... If you have a reset pin connected, specify the GPIO number with the reset setting, e.g. sudo mpd_oled_service_edit -o SH1106,128X64,I2C,reset=24 .... Specify the I2C bus number, if not 1, with the bus_number setting, e.g. sudo mpd_oled_service_edit -o SH1106,128X64,I2C,bus_number=0 ....
 
 
