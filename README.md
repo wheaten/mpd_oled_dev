@@ -79,6 +79,7 @@ Options
              number - switch between n and i with this period (hours), which
              may help avoid screen burn
   -p <plyr>  Player: mpd, moode, volumio, runeaudio (default: detected)
+  -L <val>   Layout type cava: t - trackinfo (default),  n - No trackinfo, CAVA only 
 ```
 
 ### OLED configuration with option -o
