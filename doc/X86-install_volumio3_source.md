@@ -1,6 +1,6 @@
 # Install instructions for Volumio 3 using source on x86
 These instructions are written as a guide to install mpd_oled from source on Volumio 3 with x86 arcitecture (Intel).
-Using a ![DollaTek CH341A USB naar UART/IIC/SPI/TTL/ISP Adapter EPP/MEM parallelle converter](https://www.amazon.nl/gp/product/B07DJZDRKG).
+Using a [DollaTek CH341A USB naar UART/IIC/SPI/TTL/ISP Adapter EPP/MEM parallelle converter](https://www.amazon.nl/gp/product/B07DJZDRKG).
 This is the only type I've tested.
 Full CAVA only for a 128x64 pixel screen
 
@@ -97,7 +97,8 @@ cd ..
 
 I used a cheap 4 pin I2C [SSD1306](https://www.amazon.nl/gp/product/B074NJMPYJ) display on a HP EliteDesk G1 800 mini or Dell Wyse 3040. 
 other PC's will also work, but haven't tested it.
-It is wired like this. https://github.com/wheaten/mpd_oled_dev/blob/main/doc/connection_i2c.png.
+It is wired like this. 
+![wired](doc/connection_i2c.png)
 Depending on your OLED, you might need to change the 2 jumpers to switch between 5V and 3,3V on the VCC output.
 
 
