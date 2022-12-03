@@ -20,7 +20,7 @@ sudo apt-get install build-essential autoconf make libtool libfftw3-dev libinipa
 
 ## Get headers to perform make (will break OTA with Volumio):
 ```
-wget https://github.com/volumio/x86-kernel-headers/blob/master/linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
+wget https://github.com/volumio/x86-kernel-headers/raw/master/linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
 sudo dpkg -i linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
 sudo ln -s /usr/src/linux-headers-5.10.139-volumio /lib/modules/5.10.139-volumio/build
 ```
