@@ -51,6 +51,7 @@
 using std::string;
 using std::vector;
 
+int prev_number = 0;
 const int SPECT_WIDTH = 64;
 
 U8G2 *p_u8g2 = nullptr;  // for use during signal handling
@@ -166,7 +167,7 @@ Options
              number - switch between n and i with this period (hours), which
              may help avoid screen burn
   -p <plyr>  Player: mpd, moode, volumio, runeaudio (default: detected)
-  -L <val>   Layout type cava: t - trackinfo (default),  n - No trackinfo, CAVA only 
+  -L <val>   Layout type cava: t - trackinfo (default),  n - No trackinfo, CAVA only       
 )",
           get_program_name().c_str(), help_ver_text,
           DEF_SCROLL_RATE, DEF_SCROLL_DELAY, cava_method.c_str(),
@@ -181,7 +182,7 @@ void OledOpts::process_command_line(int argc, char **argv)
 
   handle_long_opts(argc, argv);
 
-  while ((c = getopt(argc, argv, ":ho:b:g:f:s:C:dP:kc:I:p:")) != -1) {
+  while ((c = getopt(argc, argv, ":ho:b:g:f:s:C:dP:kc:I:p:L:")) != -1) {
     if (common_opts(c, optopt))
       continue;
 
@@ -309,7 +310,7 @@ void OledOpts::process_command_line(int argc, char **argv)
       break;
     }
 
-   case 'L': {
+    case 'L':
       if (strcmp(optarg, "t") == 0)
         layout = 't';
       else if (strcmp(optarg, "n") == 0)
@@ -317,7 +318,6 @@ void OledOpts::process_command_line(int argc, char **argv)
       else
         error("Layout type is not t or n", c);
       break;
-    }
     default:
       error("unknown command line error");
     }
@@ -482,13 +482,26 @@ void draw_clock(U8G2 &u8g2, const display_info &disp_info)
 {
   draw_text(u8g2, 22, 0, disp_info.conn.get_ip_addr(), u8g2_font_courB08_tf);
   draw_connection(u8g2, 116, 0, disp_info.conn);
-  draw_time(u8g2, 10, 16, disp_info.clock_format, u8g_font_courB24);
-  draw_date(u8g2, 32, 52, disp_info.date_format, u8g_font_courB08);
+ // draw_time(u8g2, 10, 16, disp_info.clock_format, u8g_font_courB24);
+  draw_time(u8g2, 20, 21, disp_info.clock_format, u8g_font_courB24);
+  draw_date(u8g2, 38, 55, disp_info.date_format, u8g_font_courB08);
 }
 
 void draw_spect_display(U8G2 &u8g2, const display_info &disp_info)
 {
-	if (disp_info.layout == 'n') {
+	int number; 
+	FILE *file  = fopen("/home/volumio/scripts/status.txt", "r"); // read only
+	if (file == NULL ) 
+            {   
+              printf("Error! Could not open file\n"); 
+              number = prev_number;
+    } else {
+		fscanf(file, "%d", & number );
+		prev_number = number;
+		fclose(file);
+	}
+		
+	if (  number == 1 ) {
 		draw_text(u8g2, 5, 55, "31", u8g2_font_tom_thumb_4x6_t_all);
 		draw_text(u8g2, 15, 55, "63", u8g2_font_tom_thumb_4x6_t_all);
 		draw_text(u8g2, 25, 55, "125", u8g2_font_tom_thumb_4x6_t_all);
@@ -582,6 +595,7 @@ int start_idle_loop(U8G2 *p_u8g2, const OledOpts &opts)
   disp_info.clock_format = opts.clock_format;
   disp_info.date_format = opts.date_format;
   disp_info.pause_screen = opts.pause_screen;
+  disp_info.layout = opts.layout;
   disp_info.spect.init(opts.bars, opts.gap);
   disp_info.status.set_player(opts.player);
   disp_info.status.init();
