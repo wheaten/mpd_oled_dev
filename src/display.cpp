@@ -31,6 +31,8 @@
 using std::string;
 using std::vector;
 
+//int max_data[20];
+
 namespace {
 void set_clip_on(U8G2 &u8g2, int x_start, int y_start, int x_len, int y_len)
 {
@@ -61,7 +63,8 @@ int draw_spectrum(U8G2 &u8g2, int x_start, int y_start, int width,
   int bar_width = total_bar_pixes / num_bars;
   int bar_height_max = height - 2;
   int graph_width = num_bars * bar_width + (num_bars - 1) * gap;
-
+ // int max_data[num_bars];
+  
   if (bar_width < 1 || bar_height_max < 1) // bars too small to draw
     return -1;
 
@@ -73,8 +76,15 @@ int draw_spectrum(U8G2 &u8g2, int x_start, int y_start, int width,
     int x = x_start + i * (bar_width + gap);
     // int y = y_start+2;
     int y_bar_start = std::max(y_start + height - val - 2, 0);
-    if (val)
+    if (val) {
+//		if (val > max_data[i])
+//		{max_data[i] = val;}
+//		else
+//		max_data[i] = max_data[i];
       u8g2.drawBox(x, y_bar_start, bar_width, val);
+//	u8g2.drawBox(x, 50 - max_data[i] , bar_width ,  2 );
+	}
+
   }
   return 0;
 }
