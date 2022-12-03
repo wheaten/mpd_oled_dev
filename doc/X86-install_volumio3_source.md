@@ -84,7 +84,7 @@ cd ../..  # leave libu8g2arm/build directory
 
 Download, build and install mpd_oled.
 ```
-git clone https://github.com/wheaten/mpd_oled_dev
+git clone https://github.com/wheaten/mpd_oled_dev.git
 cd mpd_oled_dev
 ./bootstrap
 LIBU8G2_DIR=../libu8g2arm CPPFLAGS="-W -Wall -Wno-psabi" ./configure --prefix=/usr/local
@@ -99,7 +99,7 @@ I used a cheap 4 pin I2C [SSD1306](https://www.amazon.nl/gp/product/B074NJMPYJ) 
 other PC's will also work, but haven't tested it.
 It is wired like this. Depending on your OLED, you might need to change the 2 jumpers to switch between 5V and 3,3V on the VCC output.
 
-![wired](connection_i2c.png)
+![wired](connection_i2c.png)  
 
 
 ## Configure a copy of the playing audio
@@ -134,9 +134,13 @@ sudo dpkg-reconfigure tzdata
 ```
 
 ## Create a start script for MPD_OLED
-If you want to run MPD_OLED:
+If you want to run MPD_OLED as standard screen:
 ```
-sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L t -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+```
+If you want to run MPD_OLED with full CAVA screen:
+```
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
 ```
 
 the code string $(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') is needed, as the bus number is not consistent. This way we always retrieve the correct number.
@@ -146,16 +150,18 @@ the code string $(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed '
 mkdir /home/volumio/scripts
 nano /home/volumio/scripts/start_mpd.sh
 ```
+Pleae pick one of the previous given code, depending if you want a default or full CAVA  screen:
 ```
 #/bin/bash
-sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L t -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
 ```
-Copy the desired string as mention above. 
 
 press CTRL+0 => Enter => CTRL+x
 ```
 chmod 0755 /home/volumio/scripts/start_mpd.sh
 ```
+![Examples:](display.png)
+
 
 ## Configure mpd_oled and set to run at boot
 Note: The program can be run without the audio copy enabled, in which case the spectrum analyser area will be blank
