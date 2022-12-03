@@ -98,7 +98,7 @@ cd ..
 I used a cheap 4 pin I2C [SSD1306](https://www.amazon.nl/gp/product/B074NJMPYJ) display on a HP EliteDesk G1 800 mini or Dell Wyse 3040. 
 other PC's will also work, but haven't tested it.
 It is wired like this. 
-![wired](doc/connection_i2c.png)
+![wired](connection_i2c.png)
 Depending on your OLED, you might need to change the 2 jumpers to switch between 5V and 3,3V on the VCC output.
 
 
