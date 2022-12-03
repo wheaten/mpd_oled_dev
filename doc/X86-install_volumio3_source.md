@@ -198,6 +198,8 @@ sudo reboot
 Adafruit
 SSD1306,128X64,I2C
 
-
+## To do:
+* Make screen size dynamic, currently only supporting 128x64
+* Currently a running PoC, to switch the layout (Normal/Full CAVA) with a switch via GPIO0
 
 
