@@ -56,7 +56,7 @@ cd ../..  # leave libu8g2arm/build directory
 
 Download, build and install mpd_oled.
 ```
-git clone https://github.com/antiprism/mpd_oled_dev
+git clone https://github.com/wheaten/mpd_oled_dev
 cd mpd_oled_dev
 ./bootstrap
 LIBU8G2_DIR=../libu8g2arm CPPFLAGS="-W -Wall -Wno-psabi" ./configure --prefix=/usr/local
