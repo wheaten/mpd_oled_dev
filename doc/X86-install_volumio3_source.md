@@ -1,4 +1,4 @@
-# Install instructions for Volumio 3 using source on x86
+# [WIP:] Install instructions for Volumio 3 using source on x86
 These instructions are written as a guide to install mpd_oled from source on Volumio 3 with x86 arcitecture (Intel).
 Using a [DollaTek CH341A USB naar UART/IIC/SPI/TTL/ISP Adapter EPP/MEM parallelle converter](https://www.amazon.nl/gp/product/B07DJZDRKG).
 This is the only type I've tested.
