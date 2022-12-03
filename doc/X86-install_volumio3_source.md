@@ -43,7 +43,7 @@ dmesg | grep i2c-ch341-usb
 Add volumio to group:
 ```
 sudo addgroup volumio i2c
-newgrp - i2c
+
 ```
 
 ## Build and install cava
@@ -117,7 +117,6 @@ Configure MPD to copy its audio output to a named pipe
 (Ignore the errors, as the pitastic was actually for the rPi, but it will fix the audio pipe)
 ```
 wget -N http://pitastic.com/mpd_oled/packages/mpd_oled_volumio_install_latest.sh
-sudo bash mpd_oled_volumio_install_latest.sh
 sudo mpd_oled_volumio_mpd_conf_install
 ```
 
@@ -136,21 +135,13 @@ sudo dpkg-reconfigure tzdata
 ```
 
 ## Create a start script for MPD_OLED
-If you want to run MPD_OLED in it's orignal configuration use:
+If you want to run MPD_OLED:
 ```
-sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L t -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
-```
-
-If you want too run as a full CAVA display, use:
-```
-sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
 ```
 
 the code string $(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') is needed, as the bus number is not consistent. This way we always retrieve the correct number.
 
-Running screens:
-
-![.](display.png)
 
 ```
 mkdir /home/volumio/scripts
@@ -158,9 +149,9 @@ nano /home/volumio/scripts/start_mpd.sh
 ```
 ```
 #/bin/bash
-sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
 ```
-Copy the desired string as mention above, in this case I take the full cava 
+Copy the desired string as mention above. 
 
 press CTRL+0 => Enter => CTRL+x
 ```
@@ -201,5 +192,6 @@ SSD1306,128X64,I2C
 ## To do:
 * Make screen size dynamic, currently only supporting 128x64 for full CAVA
 * Currently a running PoC, to switch the layout (Normal/Full CAVA) with a switch via GPIO0
+* Full CAVA screen is not working as expected. temp removed the code
 
 
