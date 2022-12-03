@@ -18,7 +18,7 @@ sudo apt-get update
 sudo apt-get install build-essential autoconf make libtool libfftw3-dev libiniparser-dev libmpdclient-dev libi2c-dev lm-sensors libasound2-dev autoconf-archive i2c-tools dkms
 ```
 
-## Get headers to perform make (will break ATO):
+## Get headers to perform make (will break OTA with Volumio):
 ```
 wget https://github.com/volumio/x86-kernel-headers/blob/master/linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
 sudo dpkg -i linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
