@@ -116,7 +116,6 @@ It is wired like this. Depending on your OLED, you might need to change the 2 ju
 Configure MPD to copy its audio output to a named pipe
 (Ignore the errors, as the pitastic was actually for the rPi, but it will fix the audio pipe)
 ```
-wget -N http://pitastic.com/mpd_oled/packages/mpd_oled_volumio_install_latest.sh
 sudo mpd_oled_volumio_mpd_conf_install
 ```
 
