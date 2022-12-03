@@ -348,3 +348,4 @@ C.A.V.A. bar spectrum audio visualizer: <https://github.com/karlstav/cava>
 Hjson for C++: <https://github.com/hjson/hjson-cpp>
 HTTP tiny library: <https://github.com/ldemailly/http-tiny>
 Libmpdclient: <https://www.musicpd.org/libs/libmpdclient/>
+MPD_OLED: <https://github.com/antiprism/mpd_oled/>
