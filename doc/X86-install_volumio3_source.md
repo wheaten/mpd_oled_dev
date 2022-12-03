@@ -149,7 +149,7 @@ sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I
 the code string $(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') is needed, as the bus number is not consistent. This way we always retrieve the correct number.
 
 Running screens:
-https://github.com/wheaten/mpd_oled_dev/blob/main/doc/display.png
+![display.png]
 ```
 mkdir /home/volumio/scripts
 nano /home/volumio/scripts/start_mpd.sh
