@@ -489,19 +489,19 @@ void draw_clock(U8G2 &u8g2, const display_info &disp_info)
 
 void draw_spect_display(U8G2 &u8g2, const display_info &disp_info)
 {
-	int number; 
-	FILE *file  = fopen("/home/volumio/scripts/status.txt", "r"); // read only
-	if (file == NULL ) 
-            {   
-              printf("Error! Could not open file\n"); 
-              number = prev_number;
-    } else {
-		fscanf(file, "%d", & number );
-		prev_number = number;
-		fclose(file);
-	}
+//	int number; 
+//	FILE *file  = fopen("/home/volumio/scripts/status.txt", "r"); // read only
+//	if (file == NULL ) 
+//            {   
+//              printf("Error! Could not open file\n"); 
+//              number = prev_number;
+//    } else {
+//		fscanf(file, "%d", & number );
+//		prev_number = number;
+//		fclose(file);
+//	}
 		
-	if (  number == 1 ) {
+	if ( disp_info.layout == 'n') {
 		draw_text(u8g2, 5, 55, "31", u8g2_font_tom_thumb_4x6_t_all);
 		draw_text(u8g2, 15, 55, "63", u8g2_font_tom_thumb_4x6_t_all);
 		draw_text(u8g2, 25, 55, "125", u8g2_font_tom_thumb_4x6_t_all);
