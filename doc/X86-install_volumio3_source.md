@@ -150,7 +150,7 @@ the code string $(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed '
 
 Running screens:
 
-!(display.png)
+![.](display.png)
 
 ```
 mkdir /home/volumio/scripts
