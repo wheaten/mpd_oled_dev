@@ -483,8 +483,9 @@ void draw_clock(U8G2 &u8g2, const display_info &disp_info)
   draw_text(u8g2, 22, 0, disp_info.conn.get_ip_addr(), u8g2_font_courB08_tf);
   draw_connection(u8g2, 116, 0, disp_info.conn);
  // draw_time(u8g2, 10, 16, disp_info.clock_format, u8g_font_courB24);
-  draw_time(u8g2, 20, 21, disp_info.clock_format, u8g_font_courB24);
-  draw_date(u8g2, 38, 55, disp_info.date_format, u8g_font_courB08);
+ // draw_time(u8g2, 17, 21, disp_info.clock_format, u8g_font_courB24);
+  draw_time(u8g2, 1, 13, disp_info.clock_format, u8g2_font_fub35_tr);
+  draw_date(u8g2, 35, 56, disp_info.date_format, u8g_font_courB08);
 }
 
 void draw_spect_display(U8G2 &u8g2, const display_info &disp_info)
@@ -524,17 +525,17 @@ void draw_spect_display(U8G2 &u8g2, const display_info &disp_info)
 
 		u8g2.setMaxClipWindow();
 		int clock_offset = (disp_info.clock_format < 2) ? 0 : -2;
-		draw_time(u8g2, 72 + clock_offset, 16, disp_info.clock_format,
-            u8g2_font_courB14_tf);
+		draw_time(u8g2, 68 + clock_offset, 13, disp_info.clock_format,
+            u8g2_font_fub17_tr);
 
 		vector<double> scroll_origin(disp_info.scroll.begin() + 2,
                                disp_info.scroll.begin() + 4);
-		draw_text_scroll(u8g2, 0, 38, disp_info.status.get_origin(), scroll_origin,
+		draw_text_scroll(u8g2, 0, 36, disp_info.status.get_origin(), scroll_origin,
                    disp_info.text_change.secs(), u8g_font_courB08, 128, 10);
 
 		vector<double> scroll_title(disp_info.scroll.begin(),
                               disp_info.scroll.begin() + 2);
-		draw_text_scroll(u8g2, 0, 46, disp_info.status.get_title(), scroll_title,
+		draw_text_scroll(u8g2, 0, 47, disp_info.status.get_title(), scroll_title,
                    disp_info.text_change.secs(), u8g_font_courB08, 128, 10);
 
 		draw_solid_slider(u8g2, 0, 56 + 6, 128, 2,100 * disp_info.status.get_progress());
