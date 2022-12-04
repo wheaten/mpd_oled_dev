@@ -24,9 +24,12 @@ echo "-----------------------------------------------------------------------"
 echo "               Installing the i2c-ch341-usb drivers...                 "
 echo "-----------------------------------------------------------------------"
 echo ""
-git clone https://github.com/gschorcht/i2c-ch341-usb.git
-cd i2c-ch341-usb
-make && sudo make install >> "/dev/null"
+if [ ! -d "/lib/modules/5.10.139-volumio/updates/dkms/i2c-ch341-usb.ko" ]
+then
+	git clone https://github.com/gschorcht/i2c-ch341-usb.git
+	cd i2c-ch341-usb
+	make && sudo make install >> "/dev/null"
+fi
 cd ~
 
 echo "-----------------------------------------------------------------------"
@@ -37,16 +40,18 @@ if id -Gn "volumio"|grep -c "i2c"; then
     echo "volumio already belongs to group i2c"
 else
     sudo addgroup volumio i2c
-    #newgrp - i2c
 fi
 
 echo "-----------------------------------------------------------------------"
 echo "               Installing the repo for CAVA...                         "
 echo "-----------------------------------------------------------------------"
 echo ""
-git clone https://github.com/karlstav/cava
-cd cava
-./autogen.sh && ./configure --disable-input-portaudio --disable-input-sndio --disable-output-ncurses --disable-input-pulse --program-prefix=mpd_oled_ && make  && sudo make install-strip >> "/dev/null"
+if [ -d "/home/volumio/cava" ]
+then
+	git clone https://github.com/karlstav/cava
+	cd cava
+	./autogen.sh && ./configure --disable-input-portaudio --disable-input-sndio --disable-output-ncurses --disable-input-pulse --program-prefix=mpd_oled_ && make  && sudo make install-strip >> "/dev/null"
+fi
 cd ~
 
 echo "-----------------------------------------------------------------------"
@@ -54,11 +59,14 @@ echo "               Installing and compiling the libu8g2 library.           "
 echo "                  This will take some time. Hold on...                 "
 echo "-----------------------------------------------------------------------"
 echo ""
-git clone https://github.com/antiprism/libu8g2arm.git
-cd libu8g2arm
-./bootstrap
-mkdir build && cd build
-CPPFLAGS="-W -Wall -Wno-psabi" ../configure --prefix=/usr/local  && make 
+if [ -d "/home/volumio/libu8g2arm"]
+then
+	git clone https://github.com/antiprism/libu8g2arm.git
+	cd libu8g2arm
+	./bootstrap
+	mkdir build && cd build
+	CPPFLAGS="-W -Wall -Wno-psabi" ../configure --prefix=/usr/local  && make 
+fi
 cd ~
 
  echo "-----------------------------------------------------------------------"
@@ -76,3 +84,10 @@ cd ~
 
 sudo mpd_oled_volumio_mpd_conf_install
 
+
+# #sudo rm -rf /usr/src/linux-headers-5.10.139-volumio
+# #sudo rm -rf /lib/modules/5.10.139-volumio
+
+# #sudo apt-mark auto '^linux-headers-5.10.139-volumio'
+# #sudo apt autoremove
+# #sudo reboot
