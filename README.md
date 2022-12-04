@@ -26,6 +26,7 @@ commands take a long time to run on a Pi Zero).
 ### Volumio
 
 * [Install mpd_oled from source on Volumio 3](doc/install_volumio3_source.md)
+* [Install mpd_oled from source on Volumio 3 for X86-Architecture](doc/X86-install_volumio3_source.md)
 
 
 ### rAudio
