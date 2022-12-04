@@ -151,7 +151,7 @@ sudo cp -n $tmp_file_name /lib/systemd/system
 sudo chmod 644 /lib/systemd/system/$service.service
 sudo systemctl daemon-reload
 sudo systemctl enable $service
-
+exit
 fi
 
 sudo dpkg-reconfigure tzdata
