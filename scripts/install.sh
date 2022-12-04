@@ -46,7 +46,7 @@ echo "-----------------------------------------------------------------------"
 echo "               Installing the repo for CAVA...                         "
 echo "-----------------------------------------------------------------------"
 echo ""
-if [ -d "/home/volumio/cava" ]
+if [ ! -d "/home/volumio/cava" ]
 then
 	git clone https://github.com/karlstav/cava
 	cd cava
@@ -59,7 +59,7 @@ echo "               Installing and compiling the libu8g2 library.           "
 echo "                  This will take some time. Hold on...                 "
 echo "-----------------------------------------------------------------------"
 echo ""
-if [ -d "/home/volumio/libu8g2arm" ]
+if [ ! -d "/home/volumio/libu8g2arm" ]
 then
 	git clone https://github.com/antiprism/libu8g2arm.git
 	cd libu8g2arm
@@ -83,4 +83,3 @@ cd ~
  cd ~
 
 sudo mpd_oled_volumio_mpd_conf_install
-
