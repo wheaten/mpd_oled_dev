@@ -10,7 +10,7 @@ Install [Volumio](https://volumio.org/). Ensure a command line prompt is
 available for entering the commands below (e.g.
 [use SSH](https://volumio.github.io/docs/User_Manual/SSH.html).)
 
-## Beta install script
+ <!--- ## Beta install script
 
 This script is still in test, but performs the installation automatically.
 I've tested it on 2 different systems
@@ -18,7 +18,7 @@ I've tested it on 2 different systems
 wget wget https://github.com/wheaten/mpd_oled_dev/raw/main/scripts/install.sh
 bash install.sh
 ```
-
+--> 
 ## Install all dependencies
 
 Install all the packages needed to build and run cava and mpd_oled
