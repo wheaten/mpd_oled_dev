@@ -59,7 +59,7 @@ echo "               Installing and compiling the libu8g2 library.           "
 echo "                  This will take some time. Hold on...                 "
 echo "-----------------------------------------------------------------------"
 echo ""
-if [ -d "/home/volumio/libu8g2arm"]
+if [ -d "/home/volumio/libu8g2arm" ]
 then
 	git clone https://github.com/antiprism/libu8g2arm.git
 	cd libu8g2arm
@@ -84,10 +84,3 @@ cd ~
 
 sudo mpd_oled_volumio_mpd_conf_install
 
-
-# #sudo rm -rf /usr/src/linux-headers-5.10.139-volumio
-# #sudo rm -rf /lib/modules/5.10.139-volumio
-
-# #sudo apt-mark auto '^linux-headers-5.10.139-volumio'
-# #sudo apt autoremove
-# #sudo reboot
