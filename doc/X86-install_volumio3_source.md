@@ -12,7 +12,8 @@ available for entering the commands below (e.g.
 
 ## Beta install script
 
-This script is still in test but performs the installation automatically
+This script is still in test, but performs the installation automatically.
+I've tested it on 2 different systems
 ```
 wget wget https://github.com/wheaten/mpd_oled_dev/raw/main/scripts/install.sh
 bash install.sh
