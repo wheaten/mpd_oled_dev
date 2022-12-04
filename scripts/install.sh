@@ -76,10 +76,3 @@ cd ~
 
 sudo mpd_oled_volumio_mpd_conf_install
 
-
-# #sudo rm -rf /usr/src/linux-headers-5.10.139-volumio
-# #sudo rm -rf /lib/modules/5.10.139-volumio
-
-# #sudo apt-mark auto '^linux-headers-5.10.139-volumio'
-# #sudo apt autoremove
-# #sudo reboot
