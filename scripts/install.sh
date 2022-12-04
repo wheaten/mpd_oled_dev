@@ -159,7 +159,7 @@ sudo dpkg-reconfigure tzdata
 echo "-----------------------------------------------------------------------"
 echo "               Start MPD_OLED                                          "
 echo "-----------------------------------------------------------------------"
-echo ""
+echo " "
 
 sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
 
