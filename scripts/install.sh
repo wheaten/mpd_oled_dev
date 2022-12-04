@@ -17,7 +17,10 @@ result=$(apt list linux-headers-$(uname -r))
 kernel=$(uname -r)
 if [[ $result == *$kernel*  ]]
 then 
-  echo "Kernel-headers have already been loaded."
+  echo "-----------------------------------------------------------------------"
+  echo "             Kernel-headers have already been loaded."
+  echo "-----------------------------------------------------------------------"
+  echo ""
 else
   wget https://github.com/volumio/x86-kernel-headers/raw/master/linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb 
   sudo dpkg -i linux-headers-5.10.139-volumio_5.10.139-volumio-1_amd64.deb
