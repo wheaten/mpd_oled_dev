@@ -92,69 +92,69 @@ cd ~
 
 sudo mpd_oled_volumio_mpd_conf_install
 
-echo "-----------------------------------------------------------------------"
-echo "               Installing the startup script...                        "
-echo "-----------------------------------------------------------------------"
-echo ""
+#echo "-----------------------------------------------------------------------"
+#echo "               Installing the startup script...                        "
+#echo "-----------------------------------------------------------------------"
+#echo ""
 
-if [ ! -d "/home/volumio/scripts" ] 
-then
-  mkdir /home/volumio/scripts
-fi
+#if [ ! -d "/home/volumio/scripts" ] 
+#then
+#  mkdir /home/volumio/scripts
+#fi
 
-if [ -f "/home/volumio/scripts/start_mpd.sh" ] 
-then
-  rm /home/volumio/scripts/start_mpd.sh
-fi
+#if [ -f "/home/volumio/scripts/start_mpd.sh" ] 
+#then
+#  rm /home/volumio/scripts/start_mpd.sh
+#fi
 
-cd /home/volumio/scripts
+#cd /home/volumio/scripts
 #touch start_mpd.sh
 #echo "#/bin/bash" >> start_mpd.sh
 #echo "sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L t -o SSD1306,128X64,I2C,bus_number='$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//')' -f 50" >> start_mpd.sh
-cat << EOF > start_mpd.sh
+#cat << EOF > start_mpd.sh
 #!/bin/bash
-sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=\$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
-EOF
-chmod 0755 start_mpd.sh
-cd ~
+#sudo -u volumio /usr/local/bin/mpd_oled -b 20 -g 2 -P s -L n -o SSD1306,128X64,I2C,bus_number=\$(dmesg | grep -iE "ch341_i2c_probe: created i2c device" | sed 's/^.*[/]//' | sed 's/.*-//') -f 50
+#EOF
+#chmod 0755 start_mpd.sh
+#cd ~
 
-echo "-----------------------------------------------------------------------"
-echo "               Installing the startup service...                       "
-echo "-----------------------------------------------------------------------"
-echo ""
+#echo "-----------------------------------------------------------------------"
+#echo "               Installing the startup service...                       "
+#echo "-----------------------------------------------------------------------"
+#echo ""
 
-if [ -f "/lib/systemd/system/oledstart.service" ]
-then
-  sudo systemctl disable oledstart.service
-  sudo rm /lib/systemd/system/oledstart.service
-  sudo systemctl daemon-reload
+#if [ -f "/lib/systemd/system/oledstart.service" ]
+#then
+ # sudo systemctl disable oledstart.service
+ # sudo rm /lib/systemd/system/oledstart.service
+ # sudo systemctl daemon-reload
   
-else
+#else
 
-service="oledstart"
-tmp_file_name="/tmp/$service.service"
-tmp_file_contents="[Unit]
-Description=MPD OLED Plugin
-After=network.target sound.target mpd.service
-Requires=mpd.service
+#service="oledstart"
+#tmp_file_name="/tmp/$service.service"
+#tmp_file_contents="[Unit]
+#Description=MPD OLED Plugin
+#After=network.target sound.target mpd.service
+#Requires=mpd.service
 
-[Service]
-ExecStart=/bin/bash /home/volumio/scripts/start_mpd.sh
+#[Service]
+#ExecStart=/bin/bash /home/volumio/scripts/start_mpd.sh
 
-[Install]
-WantedBy=multi-user.target
-"
-echo "$tmp_file_contents" > $tmp_file_name
+#[Install]
+#WantedBy=multi-user.target
 
-sudo systemctl is-active --quiet $service && sudo systemctl stop $service
-sudo cp -n $tmp_file_name /lib/systemd/system
-sudo chmod 644 /lib/systemd/system/$service.service
-sudo systemctl daemon-reload
-sudo systemctl enable $service
+#echo "$tmp_file_contents" > $tmp_file_name
 
-fi
+#sudo systemctl is-active --quiet $service && sudo systemctl stop $service
+#sudo cp -n $tmp_file_name /lib/systemd/system
+#sudo chmod 644 /lib/systemd/system/$service.service
+#sudo systemctl daemon-reload
+#sudo systemctl enable $service
 
-sudo dpkg-reconfigure tzdata
+#fi
 
-sudo systemctl start oledstart
+#sudo dpkg-reconfigure tzdata
+
+#sudo systemctl start oledstart
 
