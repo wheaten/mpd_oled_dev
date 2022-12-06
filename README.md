@@ -1,4 +1,4 @@
-# Moode, Volumio, RuneAudio and MPD OLED Spectrum Display for Raspberry Pi
+# Moode, Volumio, RuneAudio and MPD OLED Spectrum Display for Raspberry Pi and X86
 
 This is a development version of
 [mpd_oled](https://github.com/antiprism/mpd_oled).
